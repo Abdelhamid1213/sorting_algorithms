@@ -1,7 +1,8 @@
 #include "sort.h"
+#include <stddef.h>
 
 /**
- * lomuto_partition - Lomuto partition scheme for quicksort
+ * hoare_partition - Hoare partition scheme for quicksort
  * @array: Pointer to the first element of the array.
  * @low: The starting index of the partition to be sorted.
  * @high: The ending index of the partition to be sorted.
@@ -9,36 +10,34 @@
  *
  * Return: The index of the pivot after partitioning.
  */
-size_t lomuto_partition(int *array, ssize_t low, ssize_t high, size_t size)
+size_t hoare_partition(int *array, ssize_t low, ssize_t high, size_t size)
 {
 	int pivot, tmp;
 	ssize_t i, j;
 
-	pivot = array[high];
+	pivot = array[low];
 	i = low - 1;
+	j = high + 1;
 
-	for (j = low; j <= high - 1; j++)
+	while (1)
 	{
-		if (array[j] < pivot)
-		{
+		do {
 			i++;
-			tmp = array[i];
-			array[i] = array[j];
-			array[j] = tmp;
+		} while (array[i] < pivot);
 
-			if (i != j)
-				print_array(array, size);
-		}
-	}
+		do {
+			j--;
+		} while (array[j] > pivot);
 
-	tmp = array[i + 1];
-	array[i + 1] = array[high];
-	array[high] = tmp;
+		if (i >= j)
+			return j;
 
-	if (i + 1 != high)
+		tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+
 		print_array(array, size);
-
-	return (i + 1);
+	}
 }
 
 /**
@@ -54,15 +53,15 @@ void quicksort(int *array, ssize_t low, ssize_t high, size_t size)
 
 	if (low < high)
 	{
-		pivot = lomuto_partition(array, low, high, size);
-		quicksort(array, low, pivot - 1, size);
+		pivot = hoare_partition(array, low, high, size);
+		quicksort(array, low, pivot, size);
 		quicksort(array, pivot + 1, high, size);
 	}
 }
 
 /**
  * quick_sort - Sorts an array of integers in ascending order using
- *              the Quick sort algorithm with Lomuto partition scheme.
+ *              the Quick sort algorithm with Hoare partition scheme.
  * @array: Pointer to the first element of the array.
  * @size: Number of elements in the array.
  */
