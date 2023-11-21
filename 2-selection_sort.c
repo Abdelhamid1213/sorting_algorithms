@@ -10,10 +10,11 @@ void selection_sort(int *array, size_t size)
 {
 	size_t i, j;
 	int min, idx, tmp;
-	int swap = 0;
+	int swap;
 
-	for (i = 0; i < size; i++)
+	for (i = 0; i < size - 1; i++)
 	{
+		swap = 0;
 		min = array[i];
 		for (j = i + 1; j < size; j++)
 		{
@@ -30,7 +31,6 @@ void selection_sort(int *array, size_t size)
 		if (swap)
 		{
 			print_array(array, size);
-			swap = 0;
 		}
 	}
 }
